@@ -157,15 +157,46 @@ body{background:#f5f0ed}
 .handwriting-timer p{margin-bottom:0;font-size:14px}
 @media(max-width:850px){.warmup-grid{grid-template-columns:1fr}.spelling-group-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
-/* Book standards: handwriting is placed just ABOVE each notebook ruling,
-   rather than visually resting on / crossing it. Applies to all Week 5 book models. */
-.book > .date,
-.book > .heading,
-.book > .bookline,
-.book > div[style*="grid-template-columns"]{
+/* Book standards: each written line has exactly one notebook ruling beneath it.
+   The ruling repeats from the start of the content (after top padding), not
+   from the top of the outer box. Question numbers go LEFT of the red margin. */
+.book{
   position:relative;
-  top:-9px;
+  box-sizing:border-box;
+  border-left:0;
+  padding:17px 18px 20px 55px;
+  background-image:
+    linear-gradient(to right,transparent 29px,#b9404d 29px,#b9404d 32px,transparent 32px),
+    repeating-linear-gradient(to bottom,#fffdfa 0,#fffdfa 33px,#c6d7e8 33px,#c6d7e8 34px);
+  background-position:0 0,0 17px;
+  background-repeat:no-repeat,repeat;
+  background-size:100% 100%,100% auto;
+  font-size:14px;
+  line-height:34px;
 }
+.book > .date,.book > .heading,.book > .bookline{
+  position:relative;
+  top:auto;
+  box-sizing:border-box;
+  min-height:34px;
+  line-height:34px;
+  padding:0;
+  margin:0!important;
+}
+.book .date{color:#242020!important;text-decoration:underline;text-decoration-color:#a52c3a}
+.book .heading{text-align:center;text-decoration:underline;text-decoration-color:#a52c3a}
+.book .numbered-question .question-number{
+  position:absolute;
+  left:-47px;
+  top:0;
+  width:23px;
+  text-align:center;
+  color:#242020;
+  font-weight:500;
+}
+/* The three-column spelling example also starts on the same ruling. */
+.book > div[style*="grid-template-columns"]{position:relative;top:auto;line-height:34px;}
+
 </style></head><body><header class="top"><div class="brand"><div class="brandmark"><div><strong>ROOM 67'S HUMANITIES</strong></div></div><div class="smalllabel">MODULE 8 · TERM 4 · 2026</div></div><nav class="weeknav" aria-label="Weeks"><a id="week1tab" class="weekbtn" href="index.html?week=1">WEEK 1 · 14–16 OCT</a><a id="week2tab" class="weekbtn" href="index.html?week=2">WEEK 2 · 19–23 OCT</a><a id="week3tab" class="weekbtn" href="index.html?week=3">WEEK 3 · 26–30 OCT</a><a id="week4tab" class="weekbtn" href="index.html?week=4">WEEK 4 · 2–6 NOV</a><a id="week5tab" class="weekbtn active" href="week5.html" aria-current="page">WEEK 5 · 9–13 NOV</a></nav></header><main class="wrap full-width"><section class="weekly-overview" id="weekly-overview" aria-label="Week 5 overview"><div class="overview-eyebrow">WEEK 5 · 9–13 NOVEMBER 2026 · MODULE 8 · COMPASSIONATE</div><h2>Small Acts, Big Meaning</h2><p class="overview-intro">This week we're looking at how small acts of kindness make people feel included. We'll read two poems, practise our spelling and use thoughtful language in our own writing.</p><div class="overview-days"><div><strong>MON</strong><span><b>P3 · Reading Comprehension</b> — <i>The Empty Seat</i>. Read, find clues and answer your questions.</span></div><div><strong>MON</strong><span><b>P4 · Library</b> — Reading time. Spelling finalists keep practising.</span></div><div><strong>WED</strong><span><b>Reading Comprehension</b> — <i>The Spare Jacket</i>. Finish last week's activity. Fast finishers add a stanza and upload it to Google Classroom.</span></div><div><strong>THU</strong><span><b>Spelling & Vocabulary</b> — Learn when to double the last consonant before adding <i>-ing</i>.</span></div><div><strong>FRI</strong><span><b>Writing & Publishing</b> — Use a simile or metaphor to show compassion in a new stanza.</span></div></div></section><nav class="tabs" id="tabs" aria-label="Day tasks"></nav><nav class="group-nav" id="groupTabs" aria-label="Reading groups"></nav><div id="pages"></div></main><script>
 const textEmpty=`At the edge of the classroom,\none chair waited beside the wall.\nA new student stood in the doorway,\nholding a bag like a shield.\n\nAround the room, conversations rose,\nthen fell into awkward silence.\nI moved my books from the empty desk\nand said, ‘You can sit here.’\n\nNo grand speech. No cheering crowd.\nJust a chair pulled closer,\na smile returned,\nand one less person feeling alone.`;
 const textJacket=`The cold wind pushed through the gates.\nHe stood beside the court,\nhis fingers curled into his sleeves,\nwatching everyone else run.\n\nI had a jacket I did not need.\nWithout a speech or a crowd,\nI left my spare jacket\non the chair beside him.\n\nLater, he joined the game.\nThe jacket hung over the fence,\nand when he caught my eye,\nhe smiled before looking away.`;
@@ -191,7 +222,7 @@ const startersJacket=[
 ['The cold weather makes the poem feel ... because ...','The words “without a speech” show us ...','Both the jacket and the empty seat ...','The ending shows kindness because ...'],
 ['The small details make me think ... because ...','The jacket might stand for ...','Both poems show kindness by ...','Another meaning could be ... The line “...” supports this because ...']
 ];
-function book(date,title,question,answer){return `<div class="book"><div class="date">${date}</div><div class="bookline">&nbsp;</div><div class="heading">${title}</div><div class="bookline">&nbsp;</div><div class="bookline">1. ${question}</div><div class="bookline">${answer}</div></div>`}
+function book(date,title,question,answer){return `<div class="book"><div class="date">${date}</div><div class="bookline">&nbsp;</div><div class="heading">${title}</div><div class="bookline">&nbsp;</div><div class="bookline numbered-question"><span class="question-number">1.</span>${question}</div><div class="bookline">${answer}</div></div>`}
 function hero(n,date,title,desc,content){return `<article class="hero"><div class="herohead"><span class="pill">Task ${n} · ${date}</span><h2>${title}</h2><p>${desc}</p></div><div class="inner">${content}</div></article>`}
 function questions(arr,stems){return arr.map((q,i)=>`<div class="q"><div class="question-line"><b>${i+1}.</b> ${esc(q)}</div><div class="sentence-starter">E.g. <i>${esc(stems[i]||"I think ... because ...")}</i></div></div>`).join('')}
 function groupSelector(id,kind){return `<div class="panel"><span class="group-focus">Group ${currentGroup+1}</span><div>${questions(kind==='empty'?qEmpty[currentGroup]:qJacket[currentGroup],kind==='empty'?startersEmpty[currentGroup]:startersJacket[currentGroup])}</div></div>`}
